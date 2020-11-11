@@ -22,7 +22,7 @@ pub mod qmcoder {
     }
 
     #[allow(non_snake_case)]
-    #[derive(Debug, Copy, Clone)]
+    #[derive(Debug, Clone)]
     pub struct Encoder {
         qm_table: Vec<QMstatus>,
         state:u8,
@@ -104,7 +104,7 @@ pub mod qmcoder {
                     else {
                         if isInc { self.state = i.State + n; }
                         else { self.state = i.State - n; }
-                        for j in self.qm_table.into_iter() {
+                        for j in self.qm_table.Clone() {
                                 if self.state == j.State {
                                 self.Qc = i.qcHex;
                             }
