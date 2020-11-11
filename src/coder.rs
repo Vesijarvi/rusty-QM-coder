@@ -22,6 +22,7 @@ pub mod qmcoder {
     }
 
     #[allow(non_snake_case)]
+    #[derive(Debug, Copy, Clone)]
     pub struct Encoder {
         qm_table: Vec<QMstatus>,
         state:u8,
@@ -75,7 +76,7 @@ pub mod qmcoder {
                                 Ok(n) => De = n,
                                 Err(e) => {
                                     println!("ErrorMsg: {}",e);
-                                    De = 0;
+                                    De = 0; // change 's' value to 0
                                 },
                             };
                             let tmp = QMstatus::new(state, qcHex, qcDec, In, De);
@@ -94,6 +95,7 @@ pub mod qmcoder {
                 if i.qcHex == self.Qc {
                     if isInc { n = i.In; }
                     else { n = i.De; }
+                    // we haved change 's' value to 0
                     if n == 0 {
                         let tmp = self.LPS;
                         self.LPS = self.MPS;
