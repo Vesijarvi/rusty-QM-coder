@@ -63,20 +63,27 @@ pub mod qmcoder {
             let mut De:u8 = 0;
             for line in reader.lines() {
                 for word in line.unwrap().split_whitespace() {
-                    println!("word '{}'", word);
-
+                    // println!("word '{}' cnt:{}", word, cnt);
                     match cnt {
-                        0 => {state = word.parse::<u8>().unwrap();}
-                        1 => {u32::from_str_radix(word, 16);}
-                        2 => {qcDec = word.parse::<f32>().unwrap();} 
-                        3 => {In = word.parse::<u8>().unwrap();} 
-                        4 => {De = word.parse::<u8>().unwrap();
-                              let tmp = QMstatus::new(state, qcHex, qcDec, In, De);
-                              self.qm_table.push(tmp);
-                              cnt = (cnt + 1)%5;
-                            }
+                        0 => { state = word.parse::<u8>().unwrap(); }
+                        1 => { qcHex = u32::from_str_radix(word, 16).unwrap(); }
+                        2 => { qcDec = word.parse::<f32>().unwrap(); }
+                        3 => { In = word.parse::<u8>().unwrap(); }
+                        4 => {
+                            match word.parse::<u8>() {
+                                Ok(n) => De = n,
+                                Err(e) => {
+                                    println!("ErrorMsg: {}",e);
+                                    De = 0;
+                                },
+                            };
+                            let tmp = QMstatus::new(state, qcHex, qcDec, In, De);
+                            // println!("{:?}",&tmp);
+                            self.qm_table.push(tmp);             
+                        }
                         _ => {panic!("Unexpected error at match cnt!");}
                     }
+                    cnt = (cnt + 1)%5;
                 }
             }
         }
