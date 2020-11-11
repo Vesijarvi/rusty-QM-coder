@@ -60,6 +60,7 @@ fn main() {
         // we do not separate gray/binary image
         let bit_plane: Vec<bool> = to_bit_plane(&byte_stream);
         
-
+        let x = qmcoder::Encoder::new();
+        x.read_QT_table();
     }
 }

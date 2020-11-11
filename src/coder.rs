@@ -1,18 +1,28 @@
 pub mod qmcoder {
-    extern crate csv;
-    use std::fs::File;
 
     #[allow(non_snake_case)]
+    #[derive(Debug)]
     struct QMstatus {
         State:u8,
         qcHex:u32,
-        qcDec:u32,
+        qcDec:f32,
         In:u8, // increase
         De:u8, // decrease
     }
+    impl QMstatus {
+        pub fn new(State:u8, qcHex:u32, qcDec:f32, In:u8, De:u8)->QMstatus {
+            QMstatus {
+                State,
+                qcHex,
+                qcDec,
+                In,
+                De,
+            }
+        }
+    }
 
     #[allow(non_snake_case)]
-    struct Encoder {
+    pub struct Encoder {
         qm_table: Vec<QMstatus>,
         state:u8,
         Qc:u32,
@@ -25,7 +35,7 @@ pub mod qmcoder {
         LPS:bool,
     }
     impl Encoder {
-        fn new()-> Encoder {
+        pub fn new()-> Encoder {
             Encoder {
                 qm_table: Vec::new(),
                 state:0,
@@ -39,21 +49,39 @@ pub mod qmcoder {
                 LPS: false,
             }
         }
-        fn read_QT_table(self) {
-            let qmTableFile = File::open("qmtable.txt").expect("Could not open qmtable.txt");
-            // use std::io::{BufRead, BufReader};
-            // use std::fs::File;
+        pub fn read_QT_table(mut self) {
+            use std::io::{BufRead, BufReader};
+            use std::fs::File;
 
-            // let reader = BufReader::new(File::open("file.txt").expect("Cannot open file.txt"));
+            let reader = BufReader::new(File::open("src/qmtable.txt").expect("Cannot open qmtable.txt"));
 
-            // for line in reader.lines() {
-            //     for word in line.unwrap().split_whitespace() {
-            //         println!("word '{}'", word);
-            //     }
-            // }
+            let mut cnt = 0;
+            let mut state:u8 = 0;
+            let mut qcHex:u32 = 0; 
+            let mut qcDec:f32 = 0.0;
+            let mut In:u8 = 0;
+            let mut De:u8 = 0;
+            for line in reader.lines() {
+                for word in line.unwrap().split_whitespace() {
+                    println!("word '{}'", word);
+
+                    match cnt {
+                        0 => {state = word.parse::<u8>().unwrap();}
+                        1 => {u32::from_str_radix(word, 16);}
+                        2 => {qcDec = word.parse::<f32>().unwrap();} 
+                        3 => {In = word.parse::<u8>().unwrap();} 
+                        4 => {De = word.parse::<u8>().unwrap();
+                              let tmp = QMstatus::new(state, qcHex, qcDec, In, De);
+                              self.qm_table.push(tmp);
+                              cnt = (cnt + 1)%5;
+                            }
+                        _ => {panic!("Unexpected error at match cnt!");}
+                    }
+                }
+            }
         }
-        fn change_state(){}
-        fn renormalize(mut self, result:&Vec<u8>){
+        pub fn change_state(){}
+        pub fn renormalize(mut self, result:&Vec<u8>){
             while self.A < 0x8000 {
                 self.A <<= 1;
                 self.c <<= 1;
