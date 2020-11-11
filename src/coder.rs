@@ -1,7 +1,7 @@
-extern crate csv;
-use std::fs::File;
-
 pub mod qmcoder {
+    extern crate csv;
+    use std::fs::File;
+
     #[allow(non_snake_case)]
     struct QMstatus {
         State:u8,
@@ -41,7 +41,6 @@ pub mod qmcoder {
         }
         fn read_QT_table(self) {
             let qmTableFile = File::open("qmtable.txt").expect("Could not open qmtable.txt");
-            let mut csv_file = csv::Reader::from_reader(qmTableFile).delimiter(b' ').has_headers(false);
 
         }
         fn change_state(){}
