@@ -41,7 +41,16 @@ pub mod qmcoder {
         }
         fn read_QT_table(self) {
             let qmTableFile = File::open("qmtable.txt").expect("Could not open qmtable.txt");
+            // use std::io::{BufRead, BufReader};
+            // use std::fs::File;
 
+            // let reader = BufReader::new(File::open("file.txt").expect("Cannot open file.txt"));
+
+            // for line in reader.lines() {
+            //     for word in line.unwrap().split_whitespace() {
+            //         println!("word '{}'", word);
+            //     }
+            // }
         }
         fn change_state(){}
         fn renormalize(mut self, result:&Vec<u8>){
