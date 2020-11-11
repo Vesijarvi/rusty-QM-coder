@@ -49,6 +49,7 @@ pub mod qmcoder {
                 LPS: false,
             }
         }
+        // read qt table to Encoder structure
         pub fn read_QT_table(mut self) {
             use std::io::{BufRead, BufReader};
             use std::fs::File;
@@ -87,7 +88,29 @@ pub mod qmcoder {
                 }
             }
         }
-        pub fn change_state(){}
+        pub fn change_state(mut self, isInc:bool) {
+            for i in self.qm_table {
+                let n:u8;
+                if i.qcHex == self.Qc {
+                    if isInc { n = i.In; }
+                    else { n = i.De; }
+                    if n == 0 {
+                        let tmp = self.LPS;
+                        self.LPS = self.MPS;
+                        self.MPS = tmp;
+                    }
+                    else {
+                        if isInc { self.state = i.State + n; }
+                        else { self.state = i.State - n; }
+                        for j in self.qm_table.into_iter() {
+                                if self.state == j.State {
+                                self.Qc = i.qcHex;
+                            }
+                        }
+                    }
+                }
+            }
+        }
         pub fn renormalize(mut self, result:&Vec<u8>){
             while self.A < 0x8000 {
                 self.A <<= 1;
