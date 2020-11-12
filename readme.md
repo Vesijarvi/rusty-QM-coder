@@ -14,6 +14,6 @@ The code is currently 90% finished
     - [x] Change state  
     - [x] Read qttable   
     - [x] Remormalize  
-- [] Implment Decoder   
+- [ ] Implment Decoder   
 
 
