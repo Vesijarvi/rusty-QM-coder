@@ -9,11 +9,11 @@ QM encoder is an adaptive binary arithmetic coding procedure which is widely use
 
 The code is currently 90% finished
 
-[x] Read file  
-[x] Implment Encoder  
-    [x] Change state  
-    [x] Read qttable   
-    [x] Remormalize  
-[] Implment Decoder   
+- [x] Read file  
+- [x] Implment Encoder  
+    - [x] Change state  
+    - [x] Read qttable   
+    - [x] Remormalize  
+- [] Implment Decoder   
 
 
